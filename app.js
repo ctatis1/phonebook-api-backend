@@ -6,6 +6,7 @@ const userRouter = require('./controllers/users');
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
+const loginRouter = require('./controllers/login');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static('build'));
 
 app.use('/api/contacts', contactRouter);
 app.use('/api/users', userRouter);
+app.use('/api/login', loginRouter);
 
 app.use(middleware.requestLogger);
 app.use(middleware.errorHandler);
