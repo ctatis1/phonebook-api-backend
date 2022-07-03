@@ -1,5 +1,6 @@
-POST http://localhost:3001/api/persons
+POST http://localhost:3001/api/contacts
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyYzBmNDEwNmY2ODc2ZDhlZWJkZmEzNSIsImlhdCI6MTY1Njg2ODM0N30.M9kSB3nEzcOF3FwukxB0_6RR5Eo6x2UjvbrgNhSONsc
 
 {
     "name": "Juan",

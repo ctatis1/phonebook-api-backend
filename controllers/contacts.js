@@ -1,7 +1,21 @@
 const contactRouter = require('express').Router()
 const Contact = require('../models/contact')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken');
 require('express-async-errors')
+
+/**
+ * If the authorization header starts with the string 'bearer ', return the part after that. Otherwise,
+ * return null
+ * @returns The token
+ */
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if(authorization && authorization.toLowerCase().startsWith('bearer ')){
+        return authorization.substring(7)
+    }
+    return null
+}
 
 contactRouter.get('/' , async (request, response) =>{
     const contacts = await Contact.find({})
@@ -27,7 +41,17 @@ contactRouter.delete('/:id', async (req, res, next) => {
 
 contactRouter.post('/' , async (req,res) => {
     const body = req.body
-    const user = await User.findById(body.userId)
+
+    /* Getting the token from the request. */
+    const token = getTokenFrom(req)
+    /* Verifying the token. */
+    //El objeto decodificado del token contiene los campos username y id,
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if(!token || !decodedToken.id) {
+        return res.status(401).json({error: 'Token is missing or invalid'})
+    }
+
+    const user = await User.findById(decodedToken.id)
 
     if (body.name === undefined) {
         return res.status(400).json({ error: 'content missing' })
